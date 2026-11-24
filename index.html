@@ -1,114 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Festa de Final de Ano | YDUQS</title>
+<style>
+:root{--azul:#003b71;--azul-claro:#0875c9;--fundo:#f3f6fa;--texto:#17324d}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fundo);color:var(--texto)}
+header{background:linear-gradient(135deg,#003b71,#0875c9);color:white;padding:42px 20px 55px;text-align:center}
+.logo{font-size:27px;font-weight:800;letter-spacing:2px;margin-bottom:25px}
+header h1{font-size:34px;margin:0 0 12px}
+header p{margin:0;font-size:16px;opacity:.95}
+.container{width:100%;max-width:560px;margin:-30px auto 40px;padding:0 16px}
+.card{background:white;border-radius:18px;padding:28px;box-shadow:0 12px 35px rgba(0,35,75,.12)}
+.evento{text-align:center;margin-bottom:25px}
+.evento h2{color:var(--azul);font-size:23px;margin:0 0 12px}
+.evento p{margin:7px 0;line-height:1.5}
+label{display:block;font-weight:700;font-size:14px;margin:17px 0 8px}
+input,select{width:100%;padding:14px;border:1px solid #d5deea;border-radius:10px;font-size:16px;background:white;color:var(--texto)}
+input:focus,select:focus{outline:2px solid #8bc8f5;border-color:var(--azul-claro)}
+.valor{background:#eef6fc;border:1px solid #d3e9fa;border-radius:12px;padding:16px;margin-top:18px;text-align:center}
+.valor span{display:block;font-size:13px;color:#4d6680;margin-bottom:5px}
+.valor strong{font-size:30px;color:var(--azul)}
+button{width:100%;border:none;border-radius:10px;padding:16px;font-size:16px;font-weight:700;cursor:pointer;transition:.2s}
+.btn-principal{background:var(--azul-claro);color:white;margin-top:22px}
+.btn-principal:hover{background:var(--azul)}
+button:disabled{opacity:.6;cursor:wait}
+.aviso{font-size:12px;color:#687c90;text-align:center;line-height:1.5;margin-top:15px}
+#pagamento{display:none;text-align:center}
+#pagamento h2{color:var(--azul);margin-top:0}
+.sucesso{color:#16834a;font-weight:700;margin-bottom:18px}
+.pix-box{background:#f3f7fb;border:1px dashed #a7bfd4;padding:15px;border-radius:10px;word-break:break-all;font-size:12px;margin:16px 0;text-align:left;max-height:130px;overflow:auto}
+.btn-copiar{background:var(--azul);color:white;margin-top:10px}
+.pix-detalhe{font-size:14px;line-height:1.6}
+footer{text-align:center;font-size:12px;color:#718399;padding:0 20px 30px}
+@media(max-width:480px){header{padding:35px 16px 50px}header h1{font-size:27px}.card{padding:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">YDUQS</div>
+  <h1>Festa de Final de Ano</h1>
+  <p>Vamos celebrar juntos mais um ano de conquistas!</p>
+</header>
 
-const SHEET_NAME = "Confirmacoes";
+<div class="container">
+  <div class="card">
+    <div class="evento">
+      <h2>Você é nosso convidado!</h2>
+      <p>📅 10 de dezembro de 2026</p>
+      <p>🕔 A partir das 17h</p>
+      <p>📍 Espaço Barra Live – Aerotown</p>
+      <p>Antigo bar do Mumuzinho</p>
+    </div>
 
-function setup() {
-  const props = PropertiesService.getScriptProperties();
-  let id = props.getProperty("SPREADSHEET_ID");
-  let ss;
+    <form id="formulario">
+      <label for="nome">Nome completo</label>
+      <input type="text" id="nome" placeholder="Digite seu nome" required>
 
-  if (id) {
-    ss = SpreadsheetApp.openById(id);
-  } else {
-    ss = SpreadsheetApp.create("Festa de Final de Ano 2026 - Confirmacoes");
-    props.setProperty("SPREADSHEET_ID", ss.getId());
-  }
+      <label for="time">Time</label>
+      <select id="time" required>
+        <option value="">Selecione seu time</option>
+        <option>Cobrança</option>
+        <option>Controladoria</option>
+        <option>Fiscal</option>
+        <option>Jurídico</option>
+        <option>MIS</option>
+        <option>Op. Financeiras</option>
+        <option>Planej. Estratégico</option>
+        <option>Planej. Financeiro</option>
+        <option>RI &amp; M&amp;A</option>
+        <option>Suprimentos</option>
+        <option>Visagio</option>
+      </select>
 
-  let sheet = ss.getSheetByName(SHEET_NAME);
-  if (!sheet) sheet = ss.insertSheet(SHEET_NAME);
+      <label for="cargo">Cargo / cota</label>
+      <select id="cargo" required>
+        <option value="">Selecione sua cota</option>
+        <option value="Analista">Analista</option>
+        <option value="Especialista">Especialista</option>
+        <option value="Coordenador">Coordenador</option>
+      </select>
 
-  if (sheet.getLastRow() === 0) {
-    sheet.appendRow([
-      "Nome do participante",
-      "Time",
-      "Cargo",
-      "Valor da cota",
-      "Data e horário da confirmação"
-    ]);
+      <div class="valor">
+        <span>Valor da sua cota</span>
+        <strong id="valor">R$ --</strong>
+      </div>
 
-    sheet.setFrozenRows(1);
-    sheet.getRange(1,1,1,5).setFontWeight("bold");
-    sheet.getRange("D:D").setNumberFormat('"R$" #,##0.00');
-    sheet.getRange("E:E").setNumberFormat("dd/mm/yyyy hh:mm:ss");
-  }
+      <button type="submit" class="btn-principal" id="btnConfirmar">CONFIRMAR PRESENÇA</button>
+      <p class="aviso">Ao confirmar, seus dados serão registrados para controle de presença e pagamento do evento.</p>
+    </form>
 
-  return ss.getUrl();
+    <div id="pagamento">
+      <h2>Presença confirmada!</h2>
+      <p class="sucesso">Agora é só realizar o pagamento da sua cota.</p>
+      <p>Valor da sua cota:</p>
+      <h2 id="valorPagamento">R$ --</h2>
+      <p><strong>Pix copia e cola — valor já preenchido</strong></p>
+      <div class="pix-box" id="codigoPix"></div>
+      <button class="btn-copiar" type="button" onclick="copiarPix()">COPIAR PIX COPIA E COLA</button>
+      <p class="pix-detalhe">
+        Chave Pix: <strong>+5521999308972</strong><br>
+        Beneficiário informado: Ana Beatriz da Silva Rocha
+      </p>
+      <p class="aviso">Antes de confirmar o pagamento no aplicativo do banco, confira o nome do destinatário e o valor exibido.</p>
+    </div>
+  </div>
+</div>
+
+<footer>Festa de Final de Ano YDUQS • 2026</footer>
+
+<script>
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_wZMx_sVNd5vidQRNhMBtJzmlaQu5R8B56fh0VuNAAWIJ4dHU43qaunvjBb_CDZBE8w/exec";
+const PIX_KEY = "+5521999308972";
+const valores = {Analista:60, Especialista:110, Coordenador:180};
+
+const cargo = document.getElementById("cargo");
+const valor = document.getElementById("valor");
+const formulario = document.getElementById("formulario");
+const botao = document.getElementById("btnConfirmar");
+
+function formatarMoeda(numero) {
+  return numero.toLocaleString("pt-BR", {style:"currency", currency:"BRL"});
 }
 
-function doPost(e) {
+cargo.addEventListener("change", function() {
+  const v = valores[cargo.value];
+  valor.textContent = v ? formatarMoeda(v) : "R$ --";
+});
+
+// Monta um payload Pix EMV com valor fixo para a cota selecionada.
+function campoPix(id, valor) {
+  const texto = String(valor);
+  return id + String(texto.length).padStart(2, "0") + texto;
+}
+
+function crc16(payload) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < payload.length; i++) {
+    crc ^= payload.charCodeAt(i) << 8;
+    for (let j = 0; j < 8; j++) {
+      crc = (crc & 0x8000) ? ((crc << 1) ^ 0x1021) : (crc << 1);
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function gerarPix(valorCota) {
+  const chave = campoPix("00", "br.gov.bcb.pix") + campoPix("01", PIX_KEY);
+  const merchantAccount = campoPix("26", chave);
+  const additionalData = campoPix("05", "***");
+  const nomeRecebedor = "ANA BEATRIZ SILVA ROCHA";
+  const cidade = "RIO DE JANEIRO";
+
+  let payload =
+    campoPix("00", "01") +
+    campoPix("01", "11") +
+    merchantAccount +
+    campoPix("52", "0000") +
+    campoPix("53", "986") +
+    campoPix("54", valorCota.toFixed(2)) +
+    campoPix("58", "BR") +
+    campoPix("59", nomeRecebedor) +
+    campoPix("60", cidade) +
+    campoPix("62", additionalData) +
+    "6304";
+
+  return payload + crc16(payload);
+}
+
+formulario.addEventListener("submit", async function(event) {
+  event.preventDefault();
+
+  const nome = document.getElementById("nome").value.trim();
+  const time = document.getElementById("time").value;
+  const role = cargo.value;
+
+  if (!nome || !time || !role) {
+    alert("Por favor, preencha todos os campos.");
+    return;
+  }
+
+  const valorCota = valores[role];
+  if (!valorCota) {
+    alert("Selecione seu cargo para continuar.");
+    return;
+  }
+
+  botao.disabled = true;
+  botao.textContent = "REGISTRANDO...";
+
+  const dados = {name:nome, team:time, role:role};
+
   try {
-    const body = e && e.postData && e.postData.contents
-      ? JSON.parse(e.postData.contents)
-      : {};
-
-    const name = String(body.name || "").trim().slice(0,120);
-    const team = String(body.team || "");
-    const role = String(body.role || "");
-
-    const allowedTeams = [
-      "Cobrança",
-      "Controladoria",
-      "Fiscal",
-      "Jurídico",
-      "MIS",
-      "Op. Financeiras",
-      "Planej. Estratégico",
-      "Planej. Financeiro",
-      "RI & M&A",
-      "Suprimentos",
-      "Visagio"
-    ];
-
-    const amounts = {
-      "Assistente/Estagiário/Jovem Aprendiz": 0,
-      "Analista": 60,
-      "Especialista": 110,
-      "Coordenador": 180
-    };
-
-    if (
-      name.length < 2 ||
-      !allowedTeams.includes(team) ||
-      !Object.prototype.hasOwnProperty.call(amounts, role)
-    ) {
-      return jsonResponse({ok:false, message:"Dados inválidos."});
-    }
-
-    const id = PropertiesService.getScriptProperties()
-      .getProperty("SPREADSHEET_ID");
-
-    if (!id) {
-      return jsonResponse({ok:false, message:"Execute setup() primeiro."});
-    }
-
-    const sheet = SpreadsheetApp.openById(id).getSheetByName(SHEET_NAME);
-
-    sheet.appendRow([
-      name,
-      team,
-      role,
-      amounts[role],
-      new Date()
-    ]);
-
-    return jsonResponse({ok:true});
-
-  } catch (err) {
-    return jsonResponse({
-      ok:false,
-      message:"Não foi possível registrar."
+    await fetch(SCRIPT_URL, {
+      method:"POST",
+      mode:"no-cors",
+      headers:{"Content-Type":"text/plain;charset=utf-8"},
+      body:JSON.stringify(dados)
     });
+
+    document.getElementById("valorPagamento").textContent = formatarMoeda(valorCota);
+    document.getElementById("codigoPix").textContent = gerarPix(valorCota);
+    formulario.style.display = "none";
+    document.getElementById("pagamento").style.display = "block";
+  } catch (erro) {
+    alert("Não foi possível enviar sua confirmação. Verifique sua conexão e tente novamente.");
+    botao.disabled = false;
+    botao.textContent = "CONFIRMAR PRESENÇA";
   }
-}
+});
 
-function doGet() {
-  return jsonResponse({
-    ok:true,
-    service:"Festa de Final de Ano 2026 - registro de presença"
-  });
+function copiarPix() {
+  const codigo = document.getElementById("codigoPix").textContent.trim();
+  navigator.clipboard.writeText(codigo)
+    .then(() => alert("Pix copia e cola com o valor da sua cota copiado!"))
+    .catch(() => alert("Não foi possível copiar automaticamente. Selecione o código Pix e copie."));
 }
-
-function jsonResponse(obj) {
-  return ContentService
-    .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
+</script>
+</body>
+</html>
