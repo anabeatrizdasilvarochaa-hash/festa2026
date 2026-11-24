@@ -22,7 +22,7 @@
 <div id="pagamento"><h2>Presença confirmada!</h2><p class="sucesso">Agora é só realizar o pagamento da sua cota.</p><p>Valor da sua cota:</p><h2 id="valorPagamento">R$ --</h2><p><strong>Pix copia e cola</strong></p><div class="pix-box" id="chavePix">+5521999308972</div><button class="btn-copiar" type="button" onclick="copiarPix()">COPIAR CHAVE PIX</button><p class="aviso">Beneficiário: Ana Beatriz da Silva Rocha</p></div>
 </div></div><footer>Festa de Final de Ano YDUQS • 2026</footer>
 <script>
-const SCRIPT_URL="https://script.google.com/macros/s/AKfycbxB1dQAzyhTP1r0TDZ5-joqxCTtlKYFZPS_iXUYyvksSOsnroLVJMjwsmiM_HPuEF4Wfg/exec";
+const SCRIPT_URL="https://script.google.com/macros/s/AKfycby_wZMx_sVNd5vidQRNhMBtJzmlaQu5R8B56fh0VuNAAWIJ4dHU43qaunvjBb_CDZBE8w/exec";
 const valores={Analista:60,Especialista:110,Coordenador:180};
 const cargo=document.getElementById("cargo"),valor=document.getElementById("valor"),formulario=document.getElementById("formulario"),botao=document.getElementById("btnConfirmar");
 cargo.addEventListener("change",function(){const v=valores[cargo.value];valor.textContent=v?v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"}):"R$ --";});
